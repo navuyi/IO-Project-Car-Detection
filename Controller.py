@@ -22,7 +22,7 @@ class Controller:
         self.gui.startButton.place_forget()
 
         # Start calculations
-        model.calculate()
+        model.detect()
 
 
 controller = Controller()
