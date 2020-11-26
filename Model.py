@@ -1,6 +1,7 @@
 import cv2
 import time
 import numpy as np
+from Settings import *
 class Model:
     def __init__(self, filePath, dirPath):
         self.filePath = "./src/video_input/GrupaC1.avi" # Set to fixed path for now
@@ -12,10 +13,10 @@ class Model:
         # Init parameters
         self.confThreshold = 0.5    # Confidence threshold
         self.nmsThreshold = 0.4     # Non-maximum suppresion threshold
-        self.inpWidth = 416         # Width of networ's input image
-        self.inpHeight = 416        # Height of networ's input image   
+        self.inpWidth = 320         # Width of networ's input image
+        self.inpHeight = 320        # Height of networ's input image   
 
-        self.classNamesFilePath = "./src/yolov3/yolov3_classes.txt";
+        self.classNamesFilePath = "./src/yolov3/yolo_classes.txt";
         self.classNames = None;
         with open(self.classNamesFilePath, 'rt') as f:
             self.classNames = f.read().strip('\n').split('\n')
@@ -28,20 +29,21 @@ class Model:
         self.net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
         self.net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
 
+        self.layer_names = self.net.getLayerNames()
+        self.outputlayers = [self.layer_names[i[0] - 1] for i in self.net.getUnconnectedOutLayers()]
+
         # Load input video
         self.video = cv2.VideoCapture(self.filePath)
 
         # Video writer initialization (to save output video)
         #self.video_writer = cv2.VideoWriter(outputVideo, cv2.VideoWriter_fourcc('M','J','P','G'), 30, (round(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),round(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))))
 
-
-
+        self.boxes = []
+        self.confidences = []
     
 
 
     def detect(self):
-        layer_names = self.net.getLayerNames()
-        outputlayers = [layer_names[i[0] - 1] for i in self.net.getUnconnectedOutLayers()]
         while True:
             ok, frame = self.video.read();
             if self.frameIndex == 0:
@@ -51,22 +53,38 @@ class Model:
                 print('Frame reading error or finished')
                 break;
             
-            # Create blob from frame
-            blob = cv2.dnn.blobFromImage(frame, 1/255, (self.inpWidth, self.inpHeight), [0,0,0], 1, crop=False)
+            if self.frameIndex % FRAME_OFFSET == 0:
+                self.processFrame(frame, width, height)
+                self.detectionInfo()
+            else:
+                self.showFrame(frame)
+                self.detectionInfo()
             
-            # Set input to the network
-            self.net.setInput(blob)
 
-            # Forward informations to outs variable
-            outs = self.net.forward(outputlayers)
-            class_ids=[]
-            confidences=[]
-            boxes=[]
-            for out in outs:
-                for detection in out:
-                    scores = detection[5:]
-                    class_id = np.argmax(scores)
-                    confidence = scores[class_id]
+            
+            
+
+
+    def processFrame(self, frame, width, height):
+        # Create blob from frame
+        blob = cv2.dnn.blobFromImage(frame, 1/255, (self.inpWidth, self.inpHeight), [0,0,0], swapRB=True, crop=False)
+        # Set input to neural network
+        self.net.setInput(blob)
+        outs = self.net.forward(self.outputlayers)
+        self.class_ids = []
+        self.confidences = []
+        self.boxes = [] # Boxes list is new for every frame processed
+
+        # Process frame:
+        for out in outs:
+            for detection in out:
+                scores = detection[5:]
+                class_id = np.argmax(scores)
+                confidence = scores[class_id]
+                # Detect only desired objects
+                if(self.classNames[class_id] != ("car" or "bus" or "truck" or "motorcycle" or "van")):
+                    pass
+                else:
                     if confidence > self.confThreshold:
                         # Object detected
                         center_x = int(detection[0] * width)
@@ -76,34 +94,34 @@ class Model:
                         x = int(center_x -w/2)
                         y = int(center_y - h/2)
 
+                        self.boxes.append([x,y,w,h])
+                        self.confidences.append(float(confidence))
+                        self.class_ids.append(class_id)
 
-                        if(self.classNames[class_id] == "car"):
-                            boxes.append([x,y,w,h])
-                            confidences.append(float(confidence))
-                            class_ids.append(class_id)
-
-                            indexes = cv2.dnn.NMSBoxes(boxes, confidences, self.confThreshold, self.nmsThreshold)
-                            for i in range(len(boxes)):
-                                if i in indexes:
-                                    x,y,w,h = boxes[i]
-                                    label = str(self.classNames[class_ids[i]])
-                                    color = (0,0,255)
-                                    cv2.rectangle(frame, (x,y), (x+w, y+h), (255,0,0), 2)
-                                
-
-
-            # Show frame with BBxs         
-            cv2.imshow("Result", frame)
-            cv2.waitKey(1)
-
-            self.detectionInfo()
-            
-
+                        indexes = cv2.dnn.NMSBoxes(self.boxes, self.confidences, self.confThreshold, self.nmsThreshold)
+                        for i in range(len(self.boxes)):
+                            if i in indexes:
+                                x, y, w, h = self.boxes[i]
+                                label = str(self.classNames[self.class_ids[i]])
+                                color = (0,0,255) # Its red becouse cv2 uses BGR instead of RGB xd
+                                cv2.rectangle(frame, (x,y), (x+w, y+h), color, 2)
+        
+        # Show frame with Bound Boxes
+        cv2.imshow("WTV", frame)
+        cv2.waitKey(1)
 
     
+    def showFrame(self, frame):
+        indexes = cv2.dnn.NMSBoxes(self.boxes, self.confidences, self.confThreshold, self.nmsThreshold)
+        for i in range(len(self.boxes)):
+            if i in indexes:
+                x, y, w, h = self.boxes[i]
+                label = str(self.classNames[self.class_ids[i]])
+                color = (0,0,255) # Its red becouse cv2 uses BGR instead of RGB xd
+                cv2.rectangle(frame, (x,y), (x+w, y+h), color, 2)
 
-    
-
+        cv2.imshow("WTV", frame)
+        cv2.waitKey(1)
 
 
 
