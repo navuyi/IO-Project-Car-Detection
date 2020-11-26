@@ -16,14 +16,14 @@ class Model:
         self.inpWidth = 320         # Width of networ's input image
         self.inpHeight = 320        # Height of networ's input image   
 
-        self.classNamesFilePath = "./src/yolov3/yolo_classes.txt";
+        self.classNamesFilePath = "./yolo/yolov3/yolo_classes.txt";
         self.classNames = None;
         with open(self.classNamesFilePath, 'rt') as f:
             self.classNames = f.read().strip('\n').split('\n')
 
         # Load weights and config file
-        self.model_cfg = "./src/yolov3/yolov3.cfg"
-        self.model_weights = "./src/yolov3/yolov3.weights"
+        self.model_cfg = "./yolo/yolov3/yolov3.cfg"
+        self.model_weights = "./yolo/yolov3/yolov3.weights"
 
         self.net = cv2.dnn.readNetFromDarknet(self.model_cfg, self.model_weights)
         self.net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
