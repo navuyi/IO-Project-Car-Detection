@@ -39,6 +39,7 @@ class Model:
         #self.video_writer = cv2.VideoWriter(outputVideo, cv2.VideoWriter_fourcc('M','J','P','G'), 30, (round(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),round(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))))
 
         self.boxes = []
+        self.old_boxes = []
         self.confidences = []
     
 
@@ -73,7 +74,9 @@ class Model:
         outs = self.net.forward(self.outputlayers)
         self.class_ids = []
         self.confidences = []
+        self.old_boxes = self.boxes
         self.boxes = [] # Boxes list is new for every frame processed
+
 
         # Process frame:
         for out in outs:
@@ -106,6 +109,8 @@ class Model:
                                 color = (0,0,255) # Its red becouse cv2 uses BGR instead of RGB xd
                                 cv2.rectangle(frame, (x,y), (x+w, y+h), color, 2)
         
+        if self.frameIndex == 0:
+            self.old_boxes = self.boxes
         # Show frame with Bound Boxes
         cv2.imshow("WTV", frame)
         cv2.waitKey(1)
@@ -113,12 +118,17 @@ class Model:
     
     def showFrame(self, frame):
         indexes = cv2.dnn.NMSBoxes(self.boxes, self.confidences, self.confThreshold, self.nmsThreshold)
-        for i in range(len(self.boxes)):
+        length = min(len(self.boxes), len(self.old_boxes))
+        for i in range(length):
             if i in indexes:
-                x, y, w, h = self.boxes[i]
+                x_n, y_n, w_n, h_n = self.boxes[i]
+                x_o, y_o, w_o, h_o = self.old_boxes[i]
+                vecX = x_n - x_o
+                vecY = x_n - x_o
                 label = str(self.classNames[self.class_ids[i]])
                 color = (0,0,255) # Its red becouse cv2 uses BGR instead of RGB xd
-                cv2.rectangle(frame, (x,y), (x+w, y+h), color, 2)
+
+                cv2.rectangle(frame, (x_o + vecX, y_o + vecY), (x_n+w_n, y_n+h_n), color, 2)
 
         cv2.imshow("WTV", frame)
         cv2.waitKey(1)
