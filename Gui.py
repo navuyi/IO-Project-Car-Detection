@@ -37,7 +37,7 @@ class Gui:
         self.pathLabel2.place(relx=0.5, rely=0.60, anchor='center')
 
         # Create START button
-        self.startButton = tk.Button(master, text="START", font=(FONT_FAMILY, HEADER_FONT_SIZE, "bold") , bg="steelblue")
+        self.startButton = tk.Button(master, text="START", font=(FONT_FAMILY, HEADER_FONT_SIZE, "bold"), bg="steelblue")
         self.startButton.pack()
         self.startButton.place(relx=0.5, rely=0.9, anchor='center', width = 150, height=50)
 
