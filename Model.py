@@ -13,9 +13,9 @@ class Model:
         self.frameIndex = 0;
         # Init parameters
         self.confThreshold = 0.5    # Confidence threshold
-        self.nmsThreshold = 0.5    # Non-maximum suppresion threshold
-        self.inpWidth = 320         # Width of networ's input image
-        self.inpHeight = 320        # Height of networ's input image   
+        self.nmsThreshold = 0.4     # Non-maximum suppresion threshold
+        self.inpWidth = 416        # Width of networ's input image
+        self.inpHeight = 416        # Height of networ's input image   
 
         self.classNamesFilePath = "./yolo/yolov3/yolo_classes.txt";
         self.classNames = None;
@@ -23,10 +23,10 @@ class Model:
             self.classNames = f.read().strip('\n').split('\n')
 
         # Load weights and config file
-        self.model_cfg = "./yolo/yolov3/yolov3.cfg"
-        self.model_weights = "./yolo/yolov3/yolov3.weights"
+        self.model_cfg = "./yolo/yolov3/yolov3_v320.cfg"
+        self.model_weights = "./yolo/yolov3/yolov3_v320.weights"
 
-        self.net = cv2.dnn.readNet(self.model_cfg, self.model_weights)
+        self.net = cv2.dnn.readNetFromDarknet(self.model_cfg, self.model_weights)
         self.net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
         self.net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
 
@@ -41,8 +41,8 @@ class Model:
 
         self.boxes = []
         self.confidences = []
-        self.class_ids = []
-        self.indexes = None
+    
+
 
     def detect(self):
         while True:
@@ -68,14 +68,14 @@ class Model:
 
     def processFrame(self, frame, width, height):
         # Create blob from frame
-        blob = cv2.dnn.blobFromImage(frame, 1/255, (self.inpWidth, self.inpHeight), [0,0,0], 1, crop=False)
+        blob = cv2.dnn.blobFromImage(frame, 1/255, (self.inpWidth, self.inpHeight), [0,0,0], swapRB=True, crop=False)
         # Set input to neural network
         self.net.setInput(blob)
         outs = self.net.forward(self.outputlayers)
         self.class_ids = []
         self.confidences = []
         self.boxes = [] # Boxes list is new for every frame processed
-        
+
         # Process frame:
         for out in outs:
             for detection in out:
@@ -99,9 +99,9 @@ class Model:
                         self.confidences.append(float(confidence))
                         self.class_ids.append(class_id)
 
-                        self.indexes = cv2.dnn.NMSBoxes(self.boxes, self.confidences, self.confThreshold, self.nmsThreshold)
+                        indexes = cv2.dnn.NMSBoxes(self.boxes, self.confidences, self.confThreshold, self.nmsThreshold)
                         for i in range(len(self.boxes)):
-                            if i in self.indexes:
+                            if i in indexes:
                                 x, y, w, h = self.boxes[i]
                                 label = str(self.classNames[self.class_ids[i]])
                                 color = (0,0,255) # Its red becouse cv2 uses BGR instead of RGB xd
@@ -113,18 +113,17 @@ class Model:
 
     
     def showFrame(self, frame):
-        #indexes = cv2.dnn.NMSBoxes(self.boxes, self.confidences, self.confThreshold, self.nmsThreshold)
+        indexes = cv2.dnn.NMSBoxes(self.boxes, self.confidences, self.confThreshold, self.nmsThreshold)
         for i in range(len(self.boxes)):
-            if i in self.indexes:
+            if i in indexes:
                 x, y, w, h = self.boxes[i]
                 label = str(self.classNames[self.class_ids[i]])
                 color = (0,0,255) # Its red becouse cv2 uses BGR instead of RGB xd
                 cv2.rectangle(frame, (x,y), (x+w, y+h), color, 2)
 
-
         cv2.imshow("WTV", frame)
         cv2.waitKey(1)
-        print("asdasd")
+
 
 
     def detectionInfo(self):
