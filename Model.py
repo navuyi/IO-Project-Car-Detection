@@ -9,7 +9,7 @@ class Model:
     def __init__(self, filePath, dirPath):
         # self.filePath = filePath  # Set to fixed path for now
         # self.directoryPath = dirPath
-        self.filePath = './src/video_input/grupaC1_cut1.mp4'
+        self.filePath = './src/video_input/grupaC1_cut2.mp4'
         self.directoryPath = './results'
         print(filePath)
         print(dirPath)
@@ -27,8 +27,8 @@ class Model:
             self.classNames = f.read().strip('\n').split('\n')
 
         # Load weights and config file
-        self.model_cfg = "./yolo/yolov3/yolov3_v608.cfg"
-        self.model_weights = "./yolo/yolov3/yolov3_v608.weights"
+        self.model_cfg = "./yolo/yolov3/yolov3_v320.cfg"
+        self.model_weights = "./yolo/yolov3/yolov3_v320.weights"
 
         self.net = cv2.dnn.readNetFromDarknet(self.model_cfg, self.model_weights)
 
@@ -40,6 +40,7 @@ class Model:
         # self.net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
         # self.net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
 
+        self.classes = ("car", "bus", "truck", "van", "motorcycle")
         self.layer_names = self.net.getLayerNames()
         self.output_layers = [self.layer_names[i[0] - 1] for i in self.net.getUnconnectedOutLayers()]
 
@@ -81,7 +82,7 @@ class Model:
             else:
                 self.showFrame(frame)
                 self.detectionInfo()
-                self.result.write(frame)
+                # self.result.write(frame)
 
     def processFrame(self, frame, width, height):
         # Create blob from frame
@@ -101,9 +102,7 @@ class Model:
                 class_id = np.argmax(scores)
                 confidence = scores[class_id]
                 # Detect only desired objects
-                if self.classNames[int(class_id)] != ("car" or "bus" or "truck" or "motorcycle" or "van"):
-                    pass
-                else:
+                if self.classNames[int(class_id)] in self.classes:
                     if confidence > self.confThreshold:
                         # Object detected
                         center_x = int(detection[0] * width)
@@ -125,13 +124,14 @@ class Model:
                                 color = (0, 0, 255)  # Its red because cv2 uses BGR instead of RGB xd
                                 cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
                                 cv2.putText(frame, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36, 255, 12), 2)
-                                duration = self.frame_counter/self.fps
+                                duration = self.frame_counter / self.fps
                                 minutes = int(duration / 60)
                                 seconds = duration % 60
                                 self.result_lines.append(str(minutes) + ':' + str(seconds) + ' ' + str(label) + '\n')
-
+                else:
+                    pass
         # Show frame with Bound Boxes
-        # cv2.imshow("WTV", frame)
+        cv2.imshow("WTV", frame)
         cv2.waitKey(1)
 
     def showFrame(self, frame):
@@ -144,59 +144,12 @@ class Model:
                 cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
                 cv2.putText(frame, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36, 255, 12), 2)
 
-
-        # cv2.imshow("WTV", frame)
+        cv2.imshow("WTV", frame)
         cv2.waitKey(1)
 
     def detectionInfo(self):
         self.frameIndex += 1
         print(self.frameIndex)
-
-    '''
-    def calculateCvlib(self):
-        video = cv2.VideoCapture('src/GrupaC1.avi')
-        start = time.time()
-        while True:
-            (successful_read, frame) = video.read()
-            if successful_read:
-                grayscaled_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-                self.licznik += 1
-            else:
-                break
-
-            (bbox, label, conf) = cvlib.detect_common_objects(frame)
-            print(self.licznik)
-            output_frame = draw_bbox(frame, bbox, label, conf)
-            cv2.imshow("Result", output_frame)
-
-            cv2.waitKey(1)
-
-        end = time.time()
-        print(end - start)
-    
-
-
-    def calculateXML(self):
-        car_tracker = cv2.CascadeClassifier('src/cars.xml')
-        video = cv2.VideoCapture('src/GrupaC1.avi')
-
-        while True:
-            read_successful, frame = video.read()
-
-            if read_successful:
-                grayscaled_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            else:
-                break
-
-            # Detect cars
-            cars = car_tracker.detectMultiScale(grayscaled_frame, 1.2, 1)
-
-            for (x,y,w,h) in cars:
-                cv2.rectangle(grayscaled_frame, (x, y), (x+w, y+h), (0, 0, 255), 2)
-
-            cv2.imshow("Bla bla", grayscaled_frame)
-            cv2.waitKey(1)
-    '''
 
 
 if __name__ == '__main__':
@@ -204,4 +157,4 @@ if __name__ == '__main__':
     model = Model('', '')
     model.detect()
     time2 = time.time()
-    print("Seconds since epoch =", time2 - time)
+    print("Seconds since epoch =", time2 - time1)
