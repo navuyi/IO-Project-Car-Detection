@@ -9,7 +9,7 @@ class Model:
     def __init__(self, filePath, dirPath):
         # self.filePath = filePath  # Set to fixed path for now
         # self.directoryPath = dirPath
-        self.filePath = './src/video_input/grupaC1_cut2.mp4'
+        self.filePath = './src/video_input/grupaC1_cut1.mp4'
         self.directoryPath = './results'
         print(filePath)
         print(dirPath)
@@ -76,15 +76,21 @@ class Model:
                 self.result_file.close()
                 break
             if self.frameIndex % FRAME_OFFSET == 0:
-                self.processFrame(frame, width, height)
-                self.detectionInfo()
-                self.result.write(frame)
+                if self.frame_counter % self.fps == 0:
+                    self.processFrame(frame, width, height, True)
+                    self.detectionInfo()
+                    self.result.write(frame)
+                else:
+                    self.processFrame(frame, width, height)
+                    self.detectionInfo()
+                    self.result.write(frame)
             else:
-                self.showFrame(frame)
+                # self.showFrame(frame)
                 self.detectionInfo()
-                # self.result.write(frame)
 
-    def processFrame(self, frame, width, height):
+    def processFrame(self, frame, width, height, log=False):
+        t1 = time.time()
+        fps_count = 0.0
         # Create blob from frame
         blob = cv2.dnn.blobFromImage(frame, 1 / 255, (self.inpWidth, self.inpHeight), [0, 0, 0], swapRB=True,
                                      crop=False)
@@ -94,6 +100,7 @@ class Model:
         self.class_ids = []
         self.confidences = []
         self.boxes = []  # Boxes list is new for every frame processed
+        label_count = []
 
         # Process frame:
         for out in outs:
@@ -117,20 +124,30 @@ class Model:
                         self.class_ids.append(class_id)
 
                         indexes = cv2.dnn.NMSBoxes(self.boxes, self.confidences, self.confThreshold, self.nmsThreshold)
+
                         for i in range(len(self.boxes)):
                             if i in indexes:
                                 x, y, w, h = self.boxes[i]
                                 label = str(self.classNames[int(self.class_ids[i])])
                                 color = (0, 0, 255)  # Its red because cv2 uses BGR instead of RGB xd
+                                label_count.append(label)
                                 cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
                                 cv2.putText(frame, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36, 255, 12), 2)
-                                duration = self.frame_counter / self.fps
-                                minutes = int(duration / 60)
-                                seconds = duration % 60
-                                self.result_lines.append(str(minutes) + ':' + str(seconds) + ' ' + str(label) + '\n')
                 else:
                     pass
-        # Show frame with Bound Boxes
+        if log:
+            duration = self.frame_counter / self.fps
+            minutes = int(duration / 60)
+            seconds = duration % 60
+            self.result_lines.append(str(minutes) + ':' + str("{:.0f}".format(seconds)) + '; ')
+            for label in self.classes:
+                detected_objects = label_count.count(label)
+                if detected_objects != 0:
+                    self.result_lines.append(str(label) + ': ' + str(detected_objects) + '\t')
+            self.result_lines.append("\n")
+        fps_count = (fps_count + (1. / (time.time() - t1))) / 2
+        cv2.putText(frame, "FPS: {:.2f}".format(fps_count), (0, 30),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 0, 255), 2)
         cv2.imshow("WTV", frame)
         cv2.waitKey(1)
 
