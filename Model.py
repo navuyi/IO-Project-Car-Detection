@@ -1,7 +1,8 @@
 # Opencv 4.1.2 works with yolov3 and yolov3-tiny
 import cv2
-import time
 import numpy as np
+import time
+
 from Settings import *
 
 
@@ -9,7 +10,7 @@ class Model:
     def __init__(self, filePath, dirPath):
         # self.filePath = filePath  # Set to fixed path for now
         # self.directoryPath = dirPath
-        self.filePath = './src/video_input/grupaC1_cut1.mp4'
+        self.filePath = './src/video_input/grupaC1_cut2.mp4'
         self.directoryPath = './results'
         print(filePath)
         print(dirPath)
@@ -17,7 +18,7 @@ class Model:
         self.frameIndex = 0
         # Init parameters
         self.confThreshold = 0.5  # Confidence threshold
-        self.nmsThreshold = 0.4  # Non-maximum suppresion threshold
+        self.nmsThreshold = 0.6  # Non-maximum suppresion threshold
         self.inpWidth = 416  # Width of network's input image
         self.inpHeight = 416  # Height of network's input image
 
@@ -27,8 +28,10 @@ class Model:
             self.classNames = f.read().strip('\n').split('\n')
 
         # Load weights and config file
-        self.model_cfg = "./yolo/yolov3/yolov3_v320.cfg"
-        self.model_weights = "./yolo/yolov3/yolov3_v320.weights"
+        #self.model_cfg = "./yolo/yolov4/yolov4.cfg"
+        #self.model_weights = "./yolo/yolov4/yolov4.weights"
+        self.model_cfg = "./yolo/yolov3/yolov3_v416.cfg"
+        self.model_weights = "./yolo/yolov3/yolov3_v416.weights"
 
         self.net = cv2.dnn.readNetFromDarknet(self.model_cfg, self.model_weights)
 
@@ -37,8 +40,9 @@ class Model:
         self.net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
 
         # GPU
-        # self.net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
-        # self.net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
+
+        #self.net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
+        #self.net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
 
         self.classes = ("car", "bus", "truck", "van", "motorcycle")
         self.layer_names = self.net.getLayerNames()
@@ -51,7 +55,7 @@ class Model:
         frame_height = int(self.video.get(4))
         self.size = (frame_width, frame_height)
         self.result = cv2.VideoWriter(str(self.directoryPath) + '/result.avi', cv2.VideoWriter_fourcc(*'MJPG'),
-                                      self.fps, self.size)
+                                      self.fps / FRAME_OFFSET, self.size)
         self.boxes = []
         self.confidences = []
 
@@ -63,9 +67,10 @@ class Model:
     def detect(self):
         while True:
             ok, frame = self.video.read()
-            self.frame_counter += 1
             if self.frameIndex == 0:
                 height, width, channels = frame.shape
+            self.frameIndex += 1
+            self.frame_counter += 1
             # Finish detection if error occured or process is done
             if not ok:
                 print('Frame reading error or finished')
@@ -77,6 +82,7 @@ class Model:
                 break
             if self.frameIndex % FRAME_OFFSET == 0:
                 if self.frame_counter % self.fps == 0:
+                    print(self.frame_counter)
                     self.processFrame(frame, width, height, True)
                     self.detectionInfo()
                     self.result.write(frame)
@@ -123,7 +129,8 @@ class Model:
                         self.confidences.append(float(confidence))
                         self.class_ids.append(class_id)
 
-                        indexes = cv2.dnn.NMSBoxes(self.boxes, self.confidences, self.confThreshold, self.nmsThreshold)
+                        indexes = cv2.dnn.NMSBoxes(self.boxes, self.confidences, self.confThreshold, self.nmsThreshold,
+                                                   5)
 
                         for i in range(len(self.boxes)):
                             if i in indexes:
@@ -145,7 +152,7 @@ class Model:
                 if detected_objects != 0:
                     self.result_lines.append(str(label) + ': ' + str(detected_objects) + '\t')
             self.result_lines.append("\n")
-        fps_count = (fps_count + (1. / (time.time() - t1))) / 2
+        fps_count = (fps_count + (1. / (time.time() - t1))) / 2 * FRAME_OFFSET
         cv2.putText(frame, "FPS: {:.2f}".format(fps_count), (0, 30),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 0, 255), 2)
         cv2.imshow("WTV", frame)
@@ -165,7 +172,7 @@ class Model:
         cv2.waitKey(1)
 
     def detectionInfo(self):
-        self.frameIndex += 1
+
         print(self.frameIndex)
 
 

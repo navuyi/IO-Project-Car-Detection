@@ -42,11 +42,11 @@ class Gui:
         self.startButton.place(relx=0.5, rely=0.9, anchor='center', width = 150, height=50)
 
     def selectFilePath(self):
-        self.inputFilePath = tk.filedialog.askopenfilename(initialdir="/", title="Select a File", filetypes=(("any file", "*.*"), ("avi files", "*.avi"), ("mp4 files", "*.mp4")))
+        self.inputFilePath = tk.filedialog.askopenfilename(initialdir="./", title="Select a File", filetypes=(("any file", "*.*"), ("avi files", "*.avi"), ("mp4 files", "*.mp4")))
         self.pathLabel1['text'] = str(self.inputFilePath)
 
     def selectDirectoryPath(self):
-        self.inputDirectoryPath = tk.filedialog.askdirectory(initialdir="/", title="Select directory")
+        self.inputDirectoryPath = tk.filedialog.askdirectory(initialdir="./", title="Select directory")
         self.pathLabel2['text'] = str(self.inputDirectoryPath)
 
     def getDirectoryPath(self):
