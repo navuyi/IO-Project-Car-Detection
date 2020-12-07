@@ -73,11 +73,13 @@ class Controller:
                 progressBar.grid_rowconfigure(0, weight=1)
                 progressBar.grid_columnconfigure(0, weight=1)
                 # Start detection
-                for result in detect_and_save(inputPath,outputDir,frameOffset, otfValue):
+                for result, outputPath in detect_and_save(inputPath, outputDir, frameOffset, otfValue):
                     progress.set(result)
                     popup.update()
                 # Close progress bar
                 popup.withdraw()
+                # Save output path
+                self.outputVideoPath = outputPath
 
                 # Bring back main menu after detection is done 
                     # Changes in START and PLAY buttons layout

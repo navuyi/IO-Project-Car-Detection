@@ -51,13 +51,13 @@ def detect_and_save(file_path, dir_path, frame_offset, on_the_fly=False):
             result_video.release()
             cv2.destroyAllWindows()
             result_file.close()
-            # Return result video path so it can be opened with PLAY button
-            return (str(dir_path) + '\/'+'video' + file_id + '.avi')
+            return
 
         if frame_counter % frame_offset == 0:
             print("{0:.2f}%".format(frame_counter/frame_count*100))
-            yield frame_counter/frame_count*100
-            stareldt = time.time()
+            # Yield progress and output file
+            yield frame_counter/frame_count*100, str(dir_path) + '\/'+'video' + file_id + '.avi'
+            start = time.time()
             classes, scores, boxes = model.detect(frame, CONFIDENCE_THRESHOLD, NMS_THRESHOLD)
             end = time.time()
             label_count = []
