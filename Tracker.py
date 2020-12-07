@@ -19,13 +19,14 @@ def detect_and_save(file_path, dir_path, frame_offset, on_the_fly=False):
     size = (frame_width, frame_height)
     file_id = str(hash(int(time.time())))
 
-    result_video = cv2.VideoWriter(str(dir_path) + '/result' + file_id + '.avi', cv2.VideoWriter_fourcc(*'MJPG'),
+    # Creating video file to write | Path to file is the first argument
+    result_video = cv2.VideoWriter(str(dir_path) + '/video' + file_id + '.avi', cv2.VideoWriter_fourcc(*'MJPG'),
                                    fps / frame_offset, size)
 
-    # creating file to write
-    result_file = open(str(dir_path) + '/result' + file_id + '.txt', 'w')
+    # Creating .txt file to write
+    result_file = open(str(dir_path) + '/video_log' + file_id + '.txt', 'w')
 
-    # loading neural network
+    # Loading neural network
     net = cv2.dnn.readNet("./yolo/yolov4/yolov4.weights", "./yolo/yolov4/yolov4.cfg")
 
     # GPU computing
@@ -44,11 +45,13 @@ def detect_and_save(file_path, dir_path, frame_offset, on_the_fly=False):
     while cv2.waitKey(1) < 1:
         (grabbed, frame) = vc.read()
         if not grabbed:
+            # Detection is finished, last frame has been proccessed
             vc.release()
             result_video.release()
             cv2.destroyAllWindows()
             result_file.close()
-            return
+            # Return result video path so it can be opened with PLAY button
+            return (str(dir_path) + '\/'+'video' + file_id + '.avi')
 
         if frame_counter % frame_offset == 0:
             print(frame_counter)

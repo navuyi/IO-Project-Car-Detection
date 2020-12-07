@@ -5,7 +5,7 @@ from Tracker import detect_and_save
 from tkinter import messagebox
 from Settings import WIDTH, HEIGHT
 import time
-
+from os import startfile
 
 class Controller:
     def __init__(self):
@@ -13,6 +13,8 @@ class Controller:
         self.gui = Gui(self.root)
 
         self.gui.startButton.bind('<ButtonRelease-1>', self.startAlgorithm)
+        self.gui.playButton.bind('<ButtonRelease-1>', self.playLastOutput)
+        self.outputVideoPath = None
 
         # Center gui on the screen
         ws = self.root.winfo_screenwidth()
@@ -52,7 +54,7 @@ class Controller:
                 # Hide main menu
                 self.root.withdraw()
                 # Start detection
-                detect_and_save(inputPath,outputDir,frameOffset, otfValue)
+                self.outputVideoPath = detect_and_save(inputPath,outputDir,frameOffset, otfValue)
                 # Bring back main menu after detection is done 
                     # Changes in START and PLAY buttons layout
                 self.gui.startButton.place(relx=0.3, rely=0.9, anchor='center', width = 100, height=35)
@@ -63,6 +65,10 @@ class Controller:
         else:
             messagebox.showwarning("Uwaga", "Wybierz plik wejściowy oraz katalog wyjściowy")
         
-    
+    def playLastOutput(self, event):
+        # Open last computed output videofile with OS default software
+        startfile(self.outputVideoPath)
+
+
 
 controller = Controller()
