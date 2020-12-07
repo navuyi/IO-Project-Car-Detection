@@ -17,20 +17,10 @@
       ./virenv/Scripts/activate.bat
       ```
   5. ```pip install -r requirements.txt```
-  6. Download Yolov4 weights file from  
-  7. Make sure your folder looks like that:
-  ```
-  IO2020
-      |   backend.py
-      |   gui.py
-      |   README.md
-      |   requirements.txt
-      |   yolov3.cfg
-      |   yolov3.weights 
-      |   coco.names
-      +---venv 
- ```     
+  6. Download Yolov4 weights file from https://drive.google.com/file/d/1cewMfusmPjYWbrnuJRuKhPMwRe_b9PaT/view 
+  7. Make sure your project directory looks like that:
+     
 8. 
 ```bash
-python gui.py
+python controller.py
 ```
