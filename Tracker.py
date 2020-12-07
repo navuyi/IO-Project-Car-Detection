@@ -82,5 +82,3 @@ def detect_and_save(file_path, dir_path, frame_offset):
         else:
             pass
         frame_counter += 1
-
-detect_and_save('', '', 1)
