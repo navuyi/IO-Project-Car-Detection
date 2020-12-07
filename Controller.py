@@ -56,21 +56,22 @@ class Controller:
                 # Center gui on the screen
                 ws = popup.winfo_screenwidth()
                 hs = popup.winfo_screenheight()
-                w = WIDTH
-                h = HEIGHT
+                w = 400
+                h = 200
                 # calculate position x, y
                 x = (ws / 2) - (w / 2)
                 y = (hs / 2) - (h / 2)
-                popup.geometry('+%d+%d' % (x, y))
+                popup.geometry('%dx%d+%d+%d' % (w, h, x, y))
                 popup.title("Progress")
                 progress = tk.DoubleVar()
                 label = tk.Label(popup, text="Detection in progress", font=(FONT_FAMILY, HEADER_FONT_SIZE-5, "bold"))
-                label.grid(row=0, column=0)
+                terminate = tk.Button(popup, text="STOP THE COUNT", font=(FONT_FAMILY, HEADER_FONT_SIZE-5, "bold"))
+                label.place(relx=0.5, rely=0.1, anchor='center')
                 progressBar = Progressbar(popup, variable=progress, maximum=100, orient="horizontal", length=200,
                                           mode="determinate")
-                progressBar.grid(row=2, column=0)
-                progressBar.grid_rowconfigure(0, weight=1)
-                progressBar.grid_columnconfigure(0, weight=1)
+                progressBar.place(relx=0.5, rely=0.3, anchor='center')
+                terminate.place(relx=0.5, rely=0.8, anchor='center')
+
                 # Start detection
                 for result, outputPath in detect_and_save(inputPath, outputDir, frameOffset, otfValue):
                     progress.set(result)

@@ -16,14 +16,14 @@ class Gui:
         # Create field for user's input video file
             # Label
         self.filePathLabel = tk.Label(master, text="Input file", font=(FONT_FAMILY, HEADER_FONT_SIZE, "bold"))
-        self.filePathLabel.place(relx=0.5, rely=0.1, anchor='center')
+        self.filePathLabel.place(relx=0.5, rely=0.05, anchor='center')
             # Input button
         self.filePathButton = tk.Button(master, text="Select file", command=self.selectFilePath, bg="gray69")
         self.filePathButton.pack()
-        self.filePathButton.place(relx=0.5, rely=0.18, anchor='center', width=BUTTON_WIDTH, height=BUTTON_HEIGHT)
+        self.filePathButton.place(relx=0.5, rely=0.13, anchor='center', width=BUTTON_WIDTH, height=BUTTON_HEIGHT)
             # Path label
         self.pathLabel1 = tk.Label(master, text="", font=(FONT_FAMILY, FONT_SIZE), wraplength=WIDTH*0.9)
-        self.pathLabel1.place(relx=0.5, rely=0.25, anchor='center')
+        self.pathLabel1.place(relx=0.5, rely=0.2, anchor='center')
 
         # Create field for user's result directory PATH
              # Label
@@ -40,34 +40,34 @@ class Gui:
 
         # Create frame offset label
         self.frameOffsetLabel = tk.Label(master, text="Analyze video every _ frames", font=(FONT_FAMILY, HEADER_FONT_SIZE-5, "bold"))
-        self.frameOffsetLabel.place(relx=0.5, rely=0.5, anchor='center')
+        self.frameOffsetLabel.place(relx=0.5, rely=0.6, anchor='center')
 
         # Create frame offset selector
         self.frameOffset = tk.IntVar()
         self.frameOffset.set(1) # default value is 1 
         self.selector = tk.OptionMenu(master, self.frameOffset, 1, 2, 4, 6)
         self.selector.config(bg="gray69", font=(FONT_FAMILY, 10, "bold"))
-        self.selector.place(relx=0.5, rely=0.55, anchor='center', width=75, height=25)
+        self.selector.place(relx=0.5, rely=0.63, anchor='center', width=75, height=25)
 
         # Create On The Fly Label
         self.otfLabel = tk.Label(master, text="Show result video on the go", font=(FONT_FAMILY, HEADER_FONT_SIZE-5, "bold"))
-        self.otfLabel.place(relx=0.5, rely=0.65, anchor='center')
+        self.otfLabel.place(relx=0.5, rely=0.7, anchor='center')
 
         # Create On The Fly checkbox
         self.otfValue = tk.IntVar()
         self.otfValue.set(0) # default value is 0 --> progress is not shown
         self.otfCheckbox = tk.Checkbutton(master, text=None, variable=self.otfValue)
-        self.otfCheckbox.place(relx=0.5, rely=0.7, anchor='center', width=75, height=25)
+        self.otfCheckbox.place(relx=0.5, rely=0.73, anchor='center', width=75, height=25)
 
         # Create START button
         self.startButton = tk.Button(master, text="DETECT", font=(FONT_FAMILY, HEADER_FONT_SIZE, "bold"), bg="gray69")
         self.startButton.pack()
-        self.startButton.place(relx=0.5, rely=0.9, anchor='center', width = 100, height=35)
+        self.startButton.place(relx=0.5, rely=0.85, anchor='center', width = 100, height=35)
 
         # Create PLAY button --> plays last computed detection video
         self.playButton = tk.Button(master, text="PLAY", font=(FONT_FAMILY, HEADER_FONT_SIZE, "bold"), bg="gray69")
         self.playButton.pack()
-        self.playButton.place(relx=0.7, rely=0.9, anchor='center', width = 100, height=35)
+        self.playButton.place(relx=0.7, rely=0.85, anchor='center', width = 100, height=35)
         self.playButton.place_forget()
         # Button will be set to visible after first detection cycle
 
