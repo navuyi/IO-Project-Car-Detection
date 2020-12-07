@@ -36,6 +36,14 @@ class Gui:
         self.pathLabel2 = tk.Label(master, text="", font=(FONT_FAMILY, FONT_SIZE), wraplength=WIDTH*0.9)
         self.pathLabel2.place(relx=0.5, rely=0.60, anchor='center')
 
+
+        # Create frame skip selector
+        self.skipFrame = tk.IntVar()
+        self.skipFrame.set(1)
+        print(self.skipFrame.get())
+        self.selector = tk.OptionMenu(master, self.skipFrame, 2, 3, 4, 5)
+        self.selector.place(relx=0.5, rely=0.8, anchor='center', width=100, height=50)
+
         # Create START button
         self.startButton = tk.Button(master, text="START", font=(FONT_FAMILY, HEADER_FONT_SIZE, "bold"), bg="steelblue")
         self.startButton.pack()
@@ -54,3 +62,6 @@ class Gui:
 
     def getFilePath(self):
         return self.inputFilePath
+
+    def getFrameSkip(self):
+        return self.skipFrame.get()
