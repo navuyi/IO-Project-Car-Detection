@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 from Settings import *
 
 
@@ -39,10 +39,19 @@ class Gui:
         # Create START button
         self.startButton = tk.Button(master, text="START", font=(FONT_FAMILY, HEADER_FONT_SIZE, "bold"), bg="steelblue")
         self.startButton.pack()
-        self.startButton.place(relx=0.5, rely=0.9, anchor='center', width = 150, height=50)
+        self.startButton.place(relx=0.5, rely=0.9, anchor='center', width=150, height=50)
 
     def selectFilePath(self):
-        self.inputFilePath = tk.filedialog.askopenfilename(initialdir="./", title="Select a File", filetypes=(("any file", "*.*"), ("avi files", "*.avi"), ("mp4 files", "*.mp4")))
+        """ Select input video """
+        while True:
+            filePath = tk.filedialog.askopenfilename(initialdir="./", title="Select a File", filetypes=(
+                ("any file", "*.*"), ("avi files", "*.avi"), ("mp4 files", "*.mp4")))
+            if Gui.validateFile(filePath):
+                break
+            else:
+                messagebox.showerror("Wrong video format", "Please select a valid video format (*.mp4, *.avi).")
+
+        self.inputFilePath = filePath
         self.pathLabel1['text'] = str(self.inputFilePath)
 
     def selectDirectoryPath(self):
@@ -54,3 +63,9 @@ class Gui:
 
     def getFilePath(self):
         return self.inputFilePath
+
+    @staticmethod
+    def validateFile(path):
+        """ Return true if file extension is valid, else return false """
+        validExtensions = ["mp4", "avi"]
+        return True if path.split('.')[-1] in validExtensions else False
