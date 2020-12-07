@@ -43,8 +43,8 @@ class Gui:
 
         # Create frame offset selector
         self.frameOffset = tk.IntVar()
-        self.frameOffset.set(1) # default value is 1
-        self.selector = tk.OptionMenu(master, self.frameOffset, 1, 2, 4, 6)
+        self.frameOffset.set(1) # default value is 1 
+        self.selector = tk.OptionMenu(master, self.frameOffset, 1, 2, 4, 6, 8, 10, 12)
         self.selector.config(bg="lightblue", font=(FONT_FAMILY, 10, "bold"))
         self.selector.place(relx=0.3, rely=0.75, anchor='center', width=75, height=25)
 
