@@ -11,6 +11,7 @@ class Controller:
     def __init__(self):
         self.root = tk.Tk()
         self.gui = Gui(self.root)
+        self.stop = False
 
         self.gui.startButton.bind('<ButtonRelease-1>', self.startAlgorithm)
         self.gui.playButton.bind('<ButtonRelease-1>', self.playLastOutput)
@@ -52,30 +53,35 @@ class Controller:
                 # Hide main menu
                 self.root.withdraw()
                 # Show progress bar
-                popup = tk.Toplevel()
+                self.popup = tk.Toplevel()
                 # Center gui on the screen
-                ws = popup.winfo_screenwidth()
-                hs = popup.winfo_screenheight()
+                ws = self.popup.winfo_screenwidth()
+                hs = self.popup.winfo_screenheight()
                 w = 400
                 h = 100
                 # calculate position x, y
                 x = (ws / 2) - (w / 2)
                 y = (hs / 2) - (h / 2)
-                popup.geometry('%dx%d+%d+%d' % (w, h, x, y))
-                popup.title("Progress")
+                self.popup.geometry('%dx%d+%d+%d' % (w, h, x, y))
+                self.popup.title("Progress")
+                self.popup.protocol("WM_DELETE_WINDOW", lambda: self.restart() if messagebox.askokcancel(
+                    "Quit", "Do you want to quit?") else False)
                 progress = tk.DoubleVar()
-                label = tk.Label(popup, text="Detection in progress...", font=(FONT_FAMILY, HEADER_FONT_SIZE - 5, "bold"))
+                label = tk.Label(self.popup, text="Detection in progress...", font=(FONT_FAMILY, HEADER_FONT_SIZE - 5, "bold"))
                 label.place(relx=0.5, rely=0.4, anchor='center')
-                progressBar = Progressbar(popup, variable=progress, maximum=100, orient="horizontal", length=200,
+                progressBar = Progressbar(self.popup, variable=progress, maximum=100, orient="horizontal", length=200,
                                           mode="determinate")
                 progressBar.place(relx=0.5, rely=0.6, anchor='center')
 
                 # Start detection
+                outputPath = ""
                 for result, outputPath in detect_and_save(inputPath, outputDir, frameOffset, otfValue):
+                    if self.stop:
+                        break
                     progress.set(result)
-                    popup.update()
+                    self.popup.update()
                 # Close progress bar
-                popup.withdraw()
+                self.popup.withdraw()
                 # Save output path
                 self.outputVideoPath = outputPath
 
@@ -94,6 +100,12 @@ class Controller:
     def playLastOutput(self, event):
         # Open last computed output videofile with OS default software
         startfile(self.outputVideoPath)
+
+    def restart(self):
+        self.popup.destroy()
+        self.root.destroy()
+        self.stop
+        self = Controller()
 
 
 if __name__ == '__main__':
