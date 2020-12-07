@@ -18,23 +18,24 @@ def detect_and_save(file_path, dir_path, frame_offset):
     frame_width = int(vc.get(3))
     frame_height = int(vc.get(4))
     size = (frame_width, frame_height)
+    file_id = str(hash(int(time.time())))
 
-    result_video = cv2.VideoWriter(str(dir_path) + '/result.avi', cv2.VideoWriter_fourcc(*'MJPG'),
+    result_video = cv2.VideoWriter(str(dir_path) + '/result' + file_id + '.avi', cv2.VideoWriter_fourcc(*'MJPG'),
                                    fps / frame_offset, size)
 
     # creating file to write
-    result_file = open(str(dir_path) + '/result.txt', 'w')
+    result_file = open(str(dir_path) + '/result' + file_id + '.txt', 'w')
 
     # loading neural network
     net = cv2.dnn.readNet("./yolo/yolov4/yolov4.weights", "./yolo/yolov4/yolov4.cfg")
 
     # GPU computing
-    net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
-    net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
+    # net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
+    # net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
 
     # CPU computing
-    # net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
-    # net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
+    net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
+    net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
 
     model = cv2.dnn_DetectionModel(net)
     model.setInputParams(size=(320, 320), scale=1 / 255)
@@ -74,11 +75,12 @@ def detect_and_save(file_path, dir_path, frame_offset):
                 result_file.writelines(result_lines)
             else:
                 pass
-
             fps_label = "FPS: %.2f" % (1 / (end - start)*frame_offset)
-            cv2.putText(frame, fps_label, (0, 25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-            cv2.imshow("detections", frame)
             result_video.write(frame)
+            #cv2.putText(frame, fps_label, (0, 30) cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 0, 255), 2)
+            #cv2.imshow("WTV", frame)
         else:
             pass
         frame_counter += 1
+
+detect_and_save('', '', 1)
