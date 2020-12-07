@@ -1,4 +1,3 @@
-# Opencv 4.1.2 works with yolov3 and yolov3-tiny
 import cv2
 import numpy as np
 import time
