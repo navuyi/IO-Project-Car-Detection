@@ -17,7 +17,7 @@
         ```
   5. Type in command line (cmd):
       ```
-      ./virenv/Scripts/activate.bat
+      .\virenv\Scripts\activate.bat
       ```
   6. Install required packages
       ```
