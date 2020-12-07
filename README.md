@@ -10,7 +10,9 @@
         ``` git clone https://github.com/navuyi/IO-Project-Car-Detection ```
   2. Download yolov4 weights from https://drive.google.com/file/d/1cewMfusmPjYWbrnuJRuKhPMwRe_b9PaT/view and copy it into 'IO-Project-Car-Detection' folder
   3. Enter project directory (IO-Project-Car-Detection)
-        ``` cd IO-Project-Car-Detection ```
+        ``` 
+        cd IO-Project-Car-Detection 
+        ```
   4. Virtual environment setup
         ```
         python -m venv virenv 

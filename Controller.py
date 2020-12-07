@@ -5,6 +5,7 @@ from tkinter import messagebox
 from tkinter.ttk import Progressbar
 from os import startfile
 from Settings import *
+import cv2
 
 
 class Controller:
@@ -12,7 +13,6 @@ class Controller:
         self.root = tk.Tk()
         self.gui = Gui(self.root)
         self.stop = False
-
         self.gui.startButton.bind('<ButtonRelease-1>', self.startAlgorithm)
         self.gui.playButton.bind('<ButtonRelease-1>', self.playLastOutput)
         self.outputVideoPath = None
@@ -65,19 +65,24 @@ class Controller:
                 self.popup.geometry('%dx%d+%d+%d' % (w, h, x, y))
                 self.popup.title("Progress")
                 self.popup.protocol("WM_DELETE_WINDOW", lambda: self.restart() if messagebox.askokcancel(
-                    "Quit", "Do you want to quit?") else False)
+                    "Quit", "Do you want to stop detection?") else False)
                 progress = tk.DoubleVar()
-                label = tk.Label(self.popup, text="Detection in progress...", font=(FONT_FAMILY, HEADER_FONT_SIZE - 5, "bold"))
-                label.place(relx=0.5, rely=0.4, anchor='center')
+                label = tk.Label(self.popup, text="Detection in progress...",
+                                 font=(FONT_FAMILY, HEADER_FONT_SIZE - 5, "bold"))
+                label.place(relx=0.5, rely=0.2, anchor='center')
                 progressBar = Progressbar(self.popup, variable=progress, maximum=100, orient="horizontal", length=200,
                                           mode="determinate")
-                progressBar.place(relx=0.5, rely=0.6, anchor='center')
+                progressBar.place(relx=0.5, rely=0.4, anchor='center')
+                labelAbort = tk.Label(self.popup, text="You can stop detection by closing this window",
+                                 font=(FONT_FAMILY, HEADER_FONT_SIZE - 5))
+                labelAbort.place(relx=0.5, rely=0.8, anchor='center')
+
 
                 # Start detection
                 outputPath = ""
                 for result, outputPath in detect_and_save(inputPath, outputDir, frameOffset, otfValue):
                     if self.stop:
-                        break
+                        return
                     progress.set(result)
                     self.popup.update()
                 # Close progress bar
@@ -93,7 +98,7 @@ class Controller:
                 self.root.deiconify()
 
             else:
-                messagebox.showwarning("Error", "Invalid format")
+                messagebox.showwarning("Error", "Invalid format of input file")
         else:
             messagebox.showwarning("Error", "Choose input file and output directory")
 
@@ -104,8 +109,9 @@ class Controller:
     def restart(self):
         self.popup.destroy()
         self.root.destroy()
-        self.stop
-        self = Controller()
+        self.stop = True
+        cv2.destroyAllWindows()
+        Controller()
 
 
 if __name__ == '__main__':
