@@ -1,5 +1,4 @@
 from Gui import Gui
-from OldModel import Model
 import tkinter as tk
 from Detector import detect_and_save
 from tkinter import messagebox
