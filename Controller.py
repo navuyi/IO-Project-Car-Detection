@@ -6,6 +6,7 @@ from tkinter import messagebox
 from Settings import WIDTH, HEIGHT
 import time
 
+
 class Controller:
     def __init__(self):
         self.root = tk.Tk()
@@ -19,15 +20,14 @@ class Controller:
 
         w = WIDTH
         h = HEIGHT
-        
+
         # calculate position x, y
-        x = (ws/2) - (w/2)    
-        y = (hs/2) - (h/2)
+        x = (ws / 2) - (w / 2)
+        y = (hs / 2) - (h / 2)
         self.root.geometry('%dx%d+%d+%d' % (w, h, x, y))
 
         # Start main loop of the gui
         self.root.mainloop()
-
 
     def startAlgorithm(self, event):
         # Get frame offset value (default is 1)
@@ -44,7 +44,7 @@ class Controller:
             otfValue = False
 
         # Check if input and output paths are selected
-        if(inputPath and outputDir):
+        if inputPath and outputDir:
             # Check input file format
             if(inputPath.endswith(('.mp4', '.avi', '.mov', '.wmv','.mpg', '.mpeg', '.flv'))):
                 # Hide main menu
