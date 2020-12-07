@@ -1,3 +1,7 @@
+# Ignore results directory
+./results
+./results/result.avi
+./results./result.txt
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -127,3 +131,14 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+yolo/yolov4/yolov4.weights
+yolo/yolov4/yolov4.cfg
+yolo/yolov4/yolo_classes.txt
+yolo/yolov3/yolov3-tiny.cfg
+yolo/yolov3/yolov3_v608.cfg
+yolo/yolov3/yolov3_v608.weights
+yolo/yolov3/yolov3_v320.weights
+yolo/yolov3/yolov3_v320.cfg
+yolo/yolov3/yolo_classes.txt
+results/result.txt
+results/result.avi
