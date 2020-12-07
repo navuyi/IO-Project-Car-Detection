@@ -1,7 +1,7 @@
 from Gui import Gui
 from OldModel import Model
 import tkinter as tk
-
+from Tracker import detect_and_save
 
 class Controller:
     def __init__(self):
@@ -17,16 +17,16 @@ class Controller:
     def startAlgorithm(self, event):
         # Get frame offset value (default is 1)
         frameOffset = self.gui.getFrameOffset()
-        print(frameOffset)
+        inputPath = self.gui.getFilePath()
+        outputDir = self.gui.getDirectoryPath()
+
+        # Start detection
+        if(inputPath and outputDir):
+            detect_and_save(inputPath,outputDir,frameOffset)
+            # Hide start button
+            self.gui.startButton.place_forget()
+
         
-        # Create instance of model - calculations
-        model = Model(self.gui.getFilePath(), self.gui.getDirectoryPath())
-
-        # Hide start button
-        self.gui.startButton.place_forget()
-
-        # Start calculations
-        model.detect()
 
 
 controller = Controller()

@@ -38,12 +38,14 @@ class Gui:
 
 
         # Create frame offset label
-
+        self.frameOffsetLabel = tk.Label(master, text="Frame Offset", font=(FONT_FAMILY, HEADER_FONT_SIZE-5, "bold"))
+        self.frameOffsetLabel.place(relx=0.5, rely=0.75, anchor='center')
 
         # Create frame offset selector
         self.frameOffset = tk.IntVar()
         self.frameOffset.set(1) # default value is 1
-        self.selector = tk.OptionMenu(master, self.frameOffset, 2, 3, 4, 5)
+        self.selector = tk.OptionMenu(master, self.frameOffset, 1, 2, 4, 6)
+        self.selector.config(bg="lightblue", font=(FONT_FAMILY, 10, "bold"))
         self.selector.place(relx=0.5, rely=0.8, anchor='center', width=75, height=25)
 
         # Create START button
