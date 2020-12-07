@@ -12,14 +12,18 @@
   3. Enter project directory (IO-Project-Car-Detection)
         ``` cd IO-Project-Car-Detection ```
   4. Virtual environment setup
-        ``` python -m venv virenv ```
+        ```
+        python -m venv virenv 
+        ```
   5. Type in command line (cmd):
-      ```bash
+      ```
       ./virenv/Scripts/activate.bat
       ```
   6. Install required packages
-      ```pip install -r requirements.txt```
+      ```
+      pip install -r requirements.txt
+      ```
   7. Execute program
-      ```bash
+      ```
       python controller.py
       ```
