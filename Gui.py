@@ -8,7 +8,7 @@ class Gui:
         self.inputDirectoryPath = None
         self.inputFilePath = None
         self.master = master
-        master.title("WTV")
+        master.title("Vehicles Detector © Figlus & Księżyk & Ryba")
         master.resizable(False, False)
         master.geometry(str(WIDTH) + "x" + str(HEIGHT))
         
@@ -23,41 +23,41 @@ class Gui:
         self.filePathButton.place(relx=0.5, rely=0.18, anchor='center', width=BUTTON_WIDTH, height=BUTTON_HEIGHT)
             # Path label
         self.pathLabel1 = tk.Label(master, text="", font=(FONT_FAMILY, FONT_SIZE), wraplength=WIDTH*0.9)
-        self.pathLabel1.place(relx=0.5, rely=0.3, anchor='center')
+        self.pathLabel1.place(relx=0.5, rely=0.25, anchor='center')
 
         # Create field for user's result directory PATH
              # Label
         self.dirPathLabel = tk.Label(master, text="Output directory", font=(FONT_FAMILY, HEADER_FONT_SIZE, "bold"))
-        self.dirPathLabel.place(relx=0.5, rely=0.4, anchor='center')
+        self.dirPathLabel.place(relx=0.5, rely=0.3, anchor='center')
             # Input button
         self.dirPathButton = tk.Button(master, text="Select directory", command=self.selectDirectoryPath, bg="gray69")
         self.dirPathButton.pack()
-        self.dirPathButton.place(relx=0.5, rely=0.48, anchor='center' , width=BUTTON_WIDTH+20, height=BUTTON_HEIGHT)
+        self.dirPathButton.place(relx=0.5, rely=0.38, anchor='center' , width=BUTTON_WIDTH+20, height=BUTTON_HEIGHT)
             # Path label
         self.pathLabel2 = tk.Label(master, text="", font=(FONT_FAMILY, FONT_SIZE), wraplength=WIDTH*0.9)
-        self.pathLabel2.place(relx=0.5, rely=0.60, anchor='center')
+        self.pathLabel2.place(relx=0.5, rely=0.45, anchor='center')
 
 
         # Create frame offset label
-        self.frameOffsetLabel = tk.Label(master, text="Frame Offset", font=(FONT_FAMILY, HEADER_FONT_SIZE-5, "bold"))
-        self.frameOffsetLabel.place(relx=0.3, rely=0.70, anchor='center')
+        self.frameOffsetLabel = tk.Label(master, text="Analyze video every _ frames", font=(FONT_FAMILY, HEADER_FONT_SIZE-5, "bold"))
+        self.frameOffsetLabel.place(relx=0.5, rely=0.5, anchor='center')
 
         # Create frame offset selector
         self.frameOffset = tk.IntVar()
         self.frameOffset.set(1) # default value is 1 
         self.selector = tk.OptionMenu(master, self.frameOffset, 1, 2, 4, 6)
         self.selector.config(bg="gray69", font=(FONT_FAMILY, 10, "bold"))
-        self.selector.place(relx=0.3, rely=0.75, anchor='center', width=75, height=25)
+        self.selector.place(relx=0.5, rely=0.55, anchor='center', width=75, height=25)
 
         # Create On The Fly Label
-        self.otfLabel = tk.Label(master, text="Show progress", font=(FONT_FAMILY, HEADER_FONT_SIZE-5, "bold"))
-        self.otfLabel.place(relx=0.7, rely=0.70, anchor='center')
+        self.otfLabel = tk.Label(master, text="Show result video on the go", font=(FONT_FAMILY, HEADER_FONT_SIZE-5, "bold"))
+        self.otfLabel.place(relx=0.5, rely=0.65, anchor='center')
 
         # Create On The Fly checkbox
         self.otfValue = tk.IntVar()
         self.otfValue.set(0) # default value is 0 --> progress is not shown
         self.otfCheckbox = tk.Checkbutton(master, text=None, variable=self.otfValue)
-        self.otfCheckbox.place(relx=0.7, rely=0.75, anchor='center', width=75, height=25)
+        self.otfCheckbox.place(relx=0.5, rely=0.7, anchor='center', width=75, height=25)
 
         # Create START button
         self.startButton = tk.Button(master, text="DETECT", font=(FONT_FAMILY, HEADER_FONT_SIZE, "bold"), bg="gray69")

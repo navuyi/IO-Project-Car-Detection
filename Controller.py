@@ -3,9 +3,9 @@ import tkinter as tk
 from Detector import detect_and_save
 from tkinter import messagebox
 from tkinter.ttk import Progressbar
-from Settings import WIDTH, HEIGHT
-import time
 from os import startfile
+from Settings import *
+
 
 class Controller:
     def __init__(self):
@@ -40,7 +40,7 @@ class Controller:
         outputDir = self.gui.getDirectoryPath()
         # Get On The Fly decision (default is 0-->None) and parse it to boolean
         otfValue = self.gui.getOTFValue()
-        if(otfValue==1):
+        if (otfValue == 1):
             otfValue = True
         else:
             otfValue = False
@@ -48,7 +48,7 @@ class Controller:
         # Check if input and output paths are selected
         if inputPath and outputDir:
             # Check input file format
-            if(inputPath.endswith(('.mp4', '.avi', '.mov', '.wmv','.mpg', '.mpeg', '.flv'))):
+            if inputPath.endswith(('.mp4', '.avi', '.mov', '.wmv', '.mpg', '.mpeg', '.flv')):
                 # Hide main menu
                 self.root.withdraw()
                 # Show progress bar
@@ -62,11 +62,13 @@ class Controller:
                 x = (ws / 2) - (w / 2)
                 y = (hs / 2) - (h / 2)
                 popup.geometry('+%d+%d' % (x, y))
-                popup.title("Progress...")
+                popup.title("Progress")
                 progress = tk.DoubleVar()
+                label = tk.Label(popup, text="Detection in progress", font=(FONT_FAMILY, HEADER_FONT_SIZE-5, "bold"))
+                label.grid(row=0, column=0)
                 progressBar = Progressbar(popup, variable=progress, maximum=100, orient="horizontal", length=200,
                                           mode="determinate")
-                progressBar.grid(row=0, column=0)
+                progressBar.grid(row=2, column=0)
                 progressBar.grid_rowconfigure(0, weight=1)
                 progressBar.grid_columnconfigure(0, weight=1)
                 # Start detection
@@ -79,9 +81,9 @@ class Controller:
                 self.outputVideoPath = outputPath
 
                 # Bring back main menu after detection is done 
-                    # Changes in START and PLAY buttons layout
-                self.gui.startButton.place(relx=0.3, rely=0.9, anchor='center', width = 100, height=35)
-                self.gui.playButton.place(relx=0.7, rely=0.9, anchor='center', width = 100, height=35) 
+                # Changes in START and PLAY buttons layout
+                self.gui.startButton.place(relx=0.3, rely=0.9, anchor='center', width=100, height=35)
+                self.gui.playButton.place(relx=0.7, rely=0.9, anchor='center', width=100, height=35)
                 self.root.deiconify()
             else:
                 messagebox.showwarning("Uwaga", "Wybierz poprawny format pliku wejściowego")
