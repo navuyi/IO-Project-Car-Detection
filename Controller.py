@@ -1,7 +1,7 @@
 from Gui import Gui
 from OldModel import Model
 import tkinter as tk
-from Tracker import detect_and_save
+from Detector import detect_and_save
 from tkinter import messagebox
 from tkinter.ttk import Progressbar
 from Settings import WIDTH, HEIGHT
@@ -37,10 +37,8 @@ class Controller:
         frameOffset = self.gui.getFrameOffset()
         # Get input video path
         inputPath = self.gui.getFilePath()
-        inputPath = "./src/video_input/GrupaC1_cut2.mp4"
         # Get output directory path
         outputDir = self.gui.getDirectoryPath()
-        outputDir = "./results"
         # Get On The Fly decision (default is 0-->None) and parse it to boolean
         otfValue = self.gui.getOTFValue()
         if(otfValue==1):
