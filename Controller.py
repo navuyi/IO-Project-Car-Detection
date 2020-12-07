@@ -34,11 +34,17 @@ class Controller:
         inputPath = self.gui.getFilePath()
         outputDir = self.gui.getDirectoryPath()
 
-        # Start detection
+        # Check if input and output paths are selected
         if(inputPath and outputDir):
-            detect_and_save(inputPath,outputDir,frameOffset)
-            # Hide start button
-            self.gui.startButton.place_forget()
+            # Check input file format
+            if(inputPath.endswith(('.mp4', '.avi', '.mov', '.wmv','.mpg', '.mpeg', '.flv'))):
+                # Start detection
+                detect_and_save(inputPath,outputDir,frameOffset)
+                # Hide start button AND SHOW PROGRESS BAR OR SOMETHING XD
+                self.gui.startButton.place_forget()
+            else:
+                messagebox.showwarning("Uwaga", "Wybierz poprawny format pliku wejściowego")
+                
         else:
             messagebox.showwarning("Uwaga", "Wybierz plik wejściowy oraz katalog wyjściowy")
         
