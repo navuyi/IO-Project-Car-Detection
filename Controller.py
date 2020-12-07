@@ -38,10 +38,11 @@ class Controller:
         if(inputPath and outputDir):
             # Check input file format
             if(inputPath.endswith(('.mp4', '.avi', '.mov', '.wmv','.mpg', '.mpeg', '.flv'))):
-                # Start detection
-                detect_and_save(inputPath,outputDir,frameOffset)
                 # Hide start button AND SHOW PROGRESS BAR OR SOMETHING XD
                 self.gui.startButton.place_forget()
+
+                # Start detection
+                detect_and_save(inputPath,outputDir,frameOffset)
             else:
                 messagebox.showwarning("Uwaga", "Wybierz poprawny format pliku wejściowego")
                 
