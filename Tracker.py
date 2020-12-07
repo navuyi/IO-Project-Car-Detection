@@ -14,6 +14,7 @@ def detect_and_save(file_path, dir_path, frame_offset, on_the_fly=False):
     vc = cv2.VideoCapture(str(file_path))
     # parameters for result video
     fps = int(vc.get(cv2.CAP_PROP_FPS))
+    frame_count = int(vc.get(cv2.CAP_PROP_FRAME_COUNT))
     frame_width = int(vc.get(3))
     frame_height = int(vc.get(4))
     size = (frame_width, frame_height)
@@ -54,8 +55,9 @@ def detect_and_save(file_path, dir_path, frame_offset, on_the_fly=False):
             return (str(dir_path) + '\/'+'video' + file_id + '.avi')
 
         if frame_counter % frame_offset == 0:
-            print(frame_counter)
-            start = time.time()
+            print("{0:.2f}%".format(frame_counter/frame_count*100))
+            yield frame_counter/frame_count*100
+            stareldt = time.time()
             classes, scores, boxes = model.detect(frame, CONFIDENCE_THRESHOLD, NMS_THRESHOLD)
             end = time.time()
             label_count = []

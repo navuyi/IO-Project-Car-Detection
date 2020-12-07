@@ -3,6 +3,7 @@ from OldModel import Model
 import tkinter as tk
 from Tracker import detect_and_save
 from tkinter import messagebox
+from tkinter.ttk import Progressbar
 from Settings import WIDTH, HEIGHT
 import time
 from os import startfile
@@ -53,8 +54,31 @@ class Controller:
             if(inputPath.endswith(('.mp4', '.avi', '.mov', '.wmv','.mpg', '.mpeg', '.flv'))):
                 # Hide main menu
                 self.root.withdraw()
+                # Show progress bar
+                popup = tk.Toplevel()
+                # Center gui on the screen
+                ws = popup.winfo_screenwidth()
+                hs = popup.winfo_screenheight()
+                w = WIDTH
+                h = HEIGHT
+                # calculate position x, y
+                x = (ws / 2) - (w / 2)
+                y = (hs / 2) - (h / 2)
+                popup.geometry('+%d+%d' % (x, y))
+                popup.title("Progress...")
+                progress = tk.DoubleVar()
+                progressBar = Progressbar(popup, variable=progress, maximum=100, orient="horizontal", length=200,
+                                          mode="determinate")
+                progressBar.grid(row=0, column=0)
+                progressBar.grid_rowconfigure(0, weight=1)
+                progressBar.grid_columnconfigure(0, weight=1)
                 # Start detection
-                self.outputVideoPath = detect_and_save(inputPath,outputDir,frameOffset, otfValue)
+                for result in detect_and_save(inputPath,outputDir,frameOffset, otfValue):
+                    progress.set(result)
+                    popup.update()
+                # Close progress bar
+                popup.withdraw()
+
                 # Bring back main menu after detection is done 
                     # Changes in START and PLAY buttons layout
                 self.gui.startButton.place(relx=0.3, rely=0.9, anchor='center', width = 100, height=35)
@@ -64,11 +88,10 @@ class Controller:
                 messagebox.showwarning("Uwaga", "Wybierz poprawny format pliku wejściowego")
         else:
             messagebox.showwarning("Uwaga", "Wybierz plik wejściowy oraz katalog wyjściowy")
-        
+
     def playLastOutput(self, event):
         # Open last computed output videofile with OS default software
         startfile(self.outputVideoPath)
-
 
 
 controller = Controller()
