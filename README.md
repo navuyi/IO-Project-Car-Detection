@@ -20,7 +20,7 @@
   6. Download Yolov4 weights file from https://drive.google.com/file/d/1cewMfusmPjYWbrnuJRuKhPMwRe_b9PaT/view 
   7. Make sure your project directory looks like that:
      
-8. 
+8. Execute program
 ```bash
 python controller.py
 ```
