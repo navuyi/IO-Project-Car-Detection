@@ -1,5 +1,36 @@
-# IO-Project-Car-Detection YOLO/OpenCV
+# IO-Project-Car-Detection YOLOv4/OpenCV
 
-Download yolo weights, cfg and class names on your own
+# Prerequisities
+  Python 3.x installed (Preffered 3.7/3.8)
+  pip
+  Git
 
-Works with Python 3.7, in order to install opencv 4.1.2 pip 20.2.4 is required.
+# Instalation for Windows 10
+  1. Clone project repository: https://github.com/navuyi/IO-Project-Car-Detection
+        ``` git clone https://github.com/navuyi/IO-Project-Car-Detection ```
+  2. Enter project directory (IO-Project-Car-Detection)
+        ``` cd IO-Project-Car-Detection ```
+  3. Virtual environment setup
+        ``` python -m venv virenv ```
+  4. Type in command line (cmd):
+      ```bash
+      ./virenv/Scripts/activate.bat
+      ```
+  5. ```pip install -r requirements.txt```
+  6. Download Yolov4 weights file from  
+  7. Make sure your folder looks like that:
+  ```
+  IO2020
+      |   backend.py
+      |   gui.py
+      |   README.md
+      |   requirements.txt
+      |   yolov3.cfg
+      |   yolov3.weights 
+      |   coco.names
+      +---venv 
+ ```     
+8. 
+```bash
+python gui.py
+```
