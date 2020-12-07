@@ -2,8 +2,7 @@ import cv2
 import time
 
 
-def detect_and_save(file_path, dir_path, frame_offset):
-
+def detect_and_save(file_path, dir_path, frame_offset, on_the_fly=False):
     CONFIDENCE_THRESHOLD = 0.2
     NMS_THRESHOLD = 0.4
     COLORS = [(0, 255, 255), (255, 255, 0), (0, 255, 0), (255, 0, 0)]
@@ -45,7 +44,11 @@ def detect_and_save(file_path, dir_path, frame_offset):
     while cv2.waitKey(1) < 1:
         (grabbed, frame) = vc.read()
         if not grabbed:
-            exit()
+            vc.release()
+            result_video.release()
+            cv2.destroyAllWindows()
+            result_file.close()
+            return
 
         if frame_counter % frame_offset == 0:
             print(frame_counter)
@@ -75,10 +78,11 @@ def detect_and_save(file_path, dir_path, frame_offset):
                 result_file.writelines(result_lines)
             else:
                 pass
-            fps_label = "FPS: %.2f" % (1 / (end - start)*frame_offset)
             result_video.write(frame)
-            #cv2.putText(frame, fps_label, (0, 30) cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 0, 255), 2)
-            #cv2.imshow("WTV", frame)
+            if on_the_fly:
+                fps_label = "FPS: %.2f" % (1 / (end - start) * frame_offset)
+                cv2.putText(frame, fps_label, (0, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 0, 255), 2)
+                cv2.imshow("Detections", frame)
         else:
             pass
         frame_counter += 1
