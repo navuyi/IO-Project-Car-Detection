@@ -34,8 +34,10 @@ class Controller:
         frameOffset = self.gui.getFrameOffset()
         # Get input video path
         inputPath = self.gui.getFilePath()
+        inputPath = "./src/video_input/GrupaC1_cut2.mp4"
         # Get output directory path
         outputDir = self.gui.getDirectoryPath()
+        outputDir = "./results"
         # Get On The Fly decision (default is 0-->None) and parse it to boolean
         otfValue = self.gui.getOTFValue()
         if(otfValue==1):
@@ -49,10 +51,12 @@ class Controller:
             if(inputPath.endswith(('.mp4', '.avi', '.mov', '.wmv','.mpg', '.mpeg', '.flv'))):
                 # Hide main menu
                 self.root.withdraw()
-                
                 # Start detection
                 detect_and_save(inputPath,outputDir,frameOffset, otfValue)
-                # Bring back main menu after detection is done
+                # Bring back main menu after detection is done 
+                    # Changes in START and PLAY buttons layout
+                self.gui.startButton.place(relx=0.3, rely=0.9, anchor='center', width = 100, height=35)
+                self.gui.playButton.place(relx=0.7, rely=0.9, anchor='center', width = 100, height=35) 
                 self.root.deiconify()
             else:
                 messagebox.showwarning("Uwaga", "Wybierz poprawny format pliku wejściowego")

@@ -39,29 +39,36 @@ class Gui:
 
         # Create frame offset label
         self.frameOffsetLabel = tk.Label(master, text="Frame Offset", font=(FONT_FAMILY, HEADER_FONT_SIZE-5, "bold"))
-        self.frameOffsetLabel.place(relx=0.3, rely=0.75, anchor='center')
+        self.frameOffsetLabel.place(relx=0.3, rely=0.70, anchor='center')
 
         # Create frame offset selector
         self.frameOffset = tk.IntVar()
         self.frameOffset.set(1) # default value is 1
         self.selector = tk.OptionMenu(master, self.frameOffset, 1, 2, 4, 6)
         self.selector.config(bg="lightblue", font=(FONT_FAMILY, 10, "bold"))
-        self.selector.place(relx=0.3, rely=0.8, anchor='center', width=75, height=25)
+        self.selector.place(relx=0.3, rely=0.75, anchor='center', width=75, height=25)
 
         # Create On The Fly Label
         self.otfLabel = tk.Label(master, text="Show progress", font=(FONT_FAMILY, HEADER_FONT_SIZE-5, "bold"))
-        self.otfLabel.place(relx=0.7, rely=0.75, anchor='center')
+        self.otfLabel.place(relx=0.7, rely=0.70, anchor='center')
 
         # Create On The Fly checkbox
         self.otfValue = tk.IntVar()
         self.otfValue.set(0) # default value is 0 --> progress is not shown
         self.otfCheckbox = tk.Checkbutton(master, text=None, variable=self.otfValue)
-        self.otfCheckbox.place(relx=0.7, rely=0.8, anchor='center', width=75, height=25)
+        self.otfCheckbox.place(relx=0.7, rely=0.75, anchor='center', width=75, height=25)
 
         # Create START button
         self.startButton = tk.Button(master, text="START", font=(FONT_FAMILY, HEADER_FONT_SIZE, "bold"), bg="steelblue")
         self.startButton.pack()
-        self.startButton.place(relx=0.5, rely=0.9, anchor='center', width = 150, height=50)
+        self.startButton.place(relx=0.5, rely=0.9, anchor='center', width = 100, height=35)
+
+        # Create PLAY button --> plays last computed detection video
+        self.playButton = tk.Button(master, text="PLAY", font=(FONT_FAMILY, HEADER_FONT_SIZE, "bold"), bg="steelblue")
+        self.playButton.pack()
+        self.playButton.place(relx=0.7, rely=0.9, anchor='center', width = 100, height=35)
+        self.playButton.place_forget()
+        # Button will be set to visible after first detection cycle
 
     def selectFilePath(self):
         self.inputFilePath = tk.filedialog.askopenfilename(initialdir="./", title="Select a File", filetypes=(("any file", "*.*"), ("avi files", "*.avi"), ("mp4 files", "*.mp4")))
