@@ -93,9 +93,9 @@ class Controller:
                 self.root.deiconify()
 
             else:
-                messagebox.showwarning("Uwaga", "Wybierz poprawny format pliku wejściowego")
+                messagebox.showwarning("Error", "Invalid format")
         else:
-            messagebox.showwarning("Uwaga", "Wybierz plik wejściowy oraz katalog wyjściowy")
+            messagebox.showwarning("Error", "Choose input file and output directory")
 
     def playLastOutput(self, event):
         # Open last computed output videofile with OS default software
