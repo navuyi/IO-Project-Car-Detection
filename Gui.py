@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import filedialog, messagebox
+from tkinter import filedialog
 from Settings import *
 
 
@@ -36,22 +36,35 @@ class Gui:
         self.pathLabel2 = tk.Label(master, text="", font=(FONT_FAMILY, FONT_SIZE), wraplength=WIDTH*0.9)
         self.pathLabel2.place(relx=0.5, rely=0.60, anchor='center')
 
+
+        # Create frame offset label
+        self.frameOffsetLabel = tk.Label(master, text="Frame Offset", font=(FONT_FAMILY, HEADER_FONT_SIZE-5, "bold"))
+        self.frameOffsetLabel.place(relx=0.3, rely=0.75, anchor='center')
+
+        # Create frame offset selector
+        self.frameOffset = tk.IntVar()
+        self.frameOffset.set(1) # default value is 1
+        self.selector = tk.OptionMenu(master, self.frameOffset, 1, 2, 4, 6)
+        self.selector.config(bg="lightblue", font=(FONT_FAMILY, 10, "bold"))
+        self.selector.place(relx=0.3, rely=0.8, anchor='center', width=75, height=25)
+
+        # Create On The Fly Label
+        self.otfLabel = tk.Label(master, text="Show progress", font=(FONT_FAMILY, HEADER_FONT_SIZE-5, "bold"))
+        self.otfLabel.place(relx=0.7, rely=0.75, anchor='center')
+
+        # Create On The Fly checkbox
+        self.otfValue = tk.IntVar()
+        self.otfValue.set(0) # default value is 0 --> progress is not shown
+        self.otfCheckbox = tk.Checkbutton(master, text=None, variable=self.otfValue)
+        self.otfCheckbox.place(relx=0.7, rely=0.8, anchor='center', width=75, height=25)
+
         # Create START button
         self.startButton = tk.Button(master, text="START", font=(FONT_FAMILY, HEADER_FONT_SIZE, "bold"), bg="steelblue")
         self.startButton.pack()
-        self.startButton.place(relx=0.5, rely=0.9, anchor='center', width=150, height=50)
+        self.startButton.place(relx=0.5, rely=0.9, anchor='center', width = 150, height=50)
 
     def selectFilePath(self):
-        """ Select input video """
-        while True:
-            filePath = tk.filedialog.askopenfilename(initialdir="./", title="Select a File", filetypes=(
-                ("any file", "*.*"), ("avi files", "*.avi"), ("mp4 files", "*.mp4")))
-            if Gui.validateFile(filePath):
-                break
-            else:
-                messagebox.showerror("Wrong video format", "Please select a valid video format (*.mp4, *.avi).")
-
-        self.inputFilePath = filePath
+        self.inputFilePath = tk.filedialog.askopenfilename(initialdir="./", title="Select a File", filetypes=(("any file", "*.*"), ("avi files", "*.avi"), ("mp4 files", "*.mp4")))
         self.pathLabel1['text'] = str(self.inputFilePath)
 
     def selectDirectoryPath(self):
@@ -64,8 +77,8 @@ class Gui:
     def getFilePath(self):
         return self.inputFilePath
 
-    @staticmethod
-    def validateFile(path):
-        """ Return true if file extension is valid, else return false """
-        validExtensions = ["mp4", "avi"]
-        return True if path.split('.')[-1] in validExtensions else False
+    def getFrameOffset(self):
+        return self.frameOffset.get()
+
+    def getOTFValue(self):
+        return self.otfValue.get()
