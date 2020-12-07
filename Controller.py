@@ -15,9 +15,9 @@ class Controller:
 
 
     def startAlgorithm(self, event):
-        # Get frame skip value (default is 1)
-        frameSkip = self.gui.getFrameSkip()
-        print(frameSkip)
+        # Get frame offset value (default is 1)
+        frameOffset = self.gui.getFrameOffset()
+        print(frameOffset)
         
         # Create instance of model - calculations
         model = Model(self.gui.getFilePath(), self.gui.getDirectoryPath())
