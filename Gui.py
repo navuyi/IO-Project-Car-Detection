@@ -37,12 +37,14 @@ class Gui:
         self.pathLabel2.place(relx=0.5, rely=0.60, anchor='center')
 
 
-        # Create frame skip selector
-        self.skipFrame = tk.IntVar()
-        self.skipFrame.set(1)
-        print(self.skipFrame.get())
-        self.selector = tk.OptionMenu(master, self.skipFrame, 2, 3, 4, 5)
-        self.selector.place(relx=0.5, rely=0.8, anchor='center', width=100, height=50)
+        # Create frame offset label
+
+
+        # Create frame offset selector
+        self.frameOffset = tk.IntVar()
+        self.frameOffset.set(1) # default value is 1
+        self.selector = tk.OptionMenu(master, self.frameOffset, 2, 3, 4, 5)
+        self.selector.place(relx=0.5, rely=0.8, anchor='center', width=75, height=25)
 
         # Create START button
         self.startButton = tk.Button(master, text="START", font=(FONT_FAMILY, HEADER_FONT_SIZE, "bold"), bg="steelblue")
@@ -63,5 +65,5 @@ class Gui:
     def getFilePath(self):
         return self.inputFilePath
 
-    def getFrameSkip(self):
-        return self.skipFrame.get()
+    def getFrameOffset(self):
+        return self.frameOffset.get()
