@@ -15,7 +15,10 @@ class Controller:
 
 
     def startAlgorithm(self, event):
-        print(self.gui.getFrameSkip())
+        # Get frame skip value (default is 1)
+        frameSkip = self.gui.getFrameSkip()
+        print(frameSkip)
+        
         # Create instance of model - calculations
         model = Model(self.gui.getFilePath(), self.gui.getDirectoryPath())
 
