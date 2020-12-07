@@ -62,7 +62,6 @@ def detect_and_save(file_path, dir_path, frame_offset, on_the_fly=False):
             start = time.time()
             classes, scores, boxes = model.detect(frame, CONFIDENCE_THRESHOLD, NMS_THRESHOLD)
             end = time.time()
-
             # Used later to count objects in frame
             label_count = []
 

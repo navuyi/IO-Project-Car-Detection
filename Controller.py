@@ -57,20 +57,18 @@ class Controller:
                 ws = popup.winfo_screenwidth()
                 hs = popup.winfo_screenheight()
                 w = 400
-                h = 200
+                h = 100
                 # calculate position x, y
                 x = (ws / 2) - (w / 2)
                 y = (hs / 2) - (h / 2)
                 popup.geometry('%dx%d+%d+%d' % (w, h, x, y))
                 popup.title("Progress")
                 progress = tk.DoubleVar()
-                label = tk.Label(popup, text="Detection in progress", font=(FONT_FAMILY, HEADER_FONT_SIZE-5, "bold"))
-                terminate = tk.Button(popup, text="STOP THE COUNT", font=(FONT_FAMILY, HEADER_FONT_SIZE-5, "bold"))
-                label.place(relx=0.5, rely=0.1, anchor='center')
+                label = tk.Label(popup, text="Detection in progress...", font=(FONT_FAMILY, HEADER_FONT_SIZE - 5, "bold"))
+                label.place(relx=0.5, rely=0.4, anchor='center')
                 progressBar = Progressbar(popup, variable=progress, maximum=100, orient="horizontal", length=200,
                                           mode="determinate")
-                progressBar.place(relx=0.5, rely=0.3, anchor='center')
-                terminate.place(relx=0.5, rely=0.8, anchor='center')
+                progressBar.place(relx=0.5, rely=0.6, anchor='center')
 
                 # Start detection
                 for result, outputPath in detect_and_save(inputPath, outputDir, frameOffset, otfValue):
@@ -85,7 +83,9 @@ class Controller:
                 # Changes in START and PLAY buttons layout
                 self.gui.startButton.place(relx=0.3, rely=0.9, anchor='center', width=100, height=35)
                 self.gui.playButton.place(relx=0.7, rely=0.9, anchor='center', width=100, height=35)
+                self.gui.finishLabel.place(relx=0.5, rely=0.8, anchor='center')
                 self.root.deiconify()
+
             else:
                 messagebox.showwarning("Uwaga", "Wybierz poprawny format pliku wejściowego")
         else:
@@ -96,4 +96,5 @@ class Controller:
         startfile(self.outputVideoPath)
 
 
-controller = Controller()
+if __name__ == '__main__':
+    controller = Controller()

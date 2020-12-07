@@ -45,7 +45,7 @@ class Gui:
         # Create frame offset selector
         self.frameOffset = tk.IntVar()
         self.frameOffset.set(1) # default value is 1 
-        self.selector = tk.OptionMenu(master, self.frameOffset, 1, 2, 4, 6)
+        self.selector = tk.OptionMenu(master, self.frameOffset, 1, 2, 4)
         self.selector.config(bg="gray69", font=(FONT_FAMILY, 10, "bold"))
         self.selector.place(relx=0.5, rely=0.63, anchor='center', width=75, height=25)
 
@@ -58,6 +58,12 @@ class Gui:
         self.otfValue.set(0) # default value is 0 --> progress is not shown
         self.otfCheckbox = tk.Checkbutton(master, text=None, variable=self.otfValue)
         self.otfCheckbox.place(relx=0.5, rely=0.73, anchor='center', width=75, height=25)
+
+        # Create label for informing user that detection is over
+
+        self.finishLabel = tk.Label(master, text="Detection is over.\n You can now play result video or analyze a new "
+                                                 "one.\n Logs and result video are saved in output directory.",
+                                    font=(FONT_FAMILY, HEADER_FONT_SIZE-3, "bold"))
 
         # Create START button
         self.startButton = tk.Button(master, text="DETECT", font=(FONT_FAMILY, HEADER_FONT_SIZE, "bold"), bg="gray69")
