@@ -19,8 +19,8 @@ class Model:
         # Init parameters
         self.confThreshold = 0.5  # Confidence threshold
         self.nmsThreshold = 0.6  # Non-maximum suppresion threshold
-        self.inpWidth = 416  # Width of network's input image
-        self.inpHeight = 416  # Height of network's input image
+        self.inpWidth = 320  # Width of network's input image
+        self.inpHeight = 320  # Height of network's input image
 
         self.classNamesFilePath = "./yolo/yolov3/yolo_classes.txt"
         self.classNames = None
@@ -30,19 +30,19 @@ class Model:
         # Load weights and config file
         #self.model_cfg = "./yolo/yolov4/yolov4.cfg"
         #self.model_weights = "./yolo/yolov4/yolov4.weights"
-        self.model_cfg = "./yolo/yolov3/yolov3_v416.cfg"
-        self.model_weights = "./yolo/yolov3/yolov3_v416.weights"
+        self.model_cfg = "./yolo/yolov3/yolov3_v320.cfg"
+        self.model_weights = "./yolo/yolov3/yolov3_v320.weights"
 
         self.net = cv2.dnn.readNetFromDarknet(self.model_cfg, self.model_weights)
 
         # CPU
-        self.net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
-        self.net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
+        #self.net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
+        #self.net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
 
         # GPU
 
-        #self.net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
-        #self.net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
+        self.net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
+        self.net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
 
         self.classes = ("car", "bus", "truck", "van", "motorcycle")
         self.layer_names = self.net.getLayerNames()
@@ -129,8 +129,7 @@ class Model:
                         self.confidences.append(float(confidence))
                         self.class_ids.append(class_id)
 
-                        indexes = cv2.dnn.NMSBoxes(self.boxes, self.confidences, self.confThreshold, self.nmsThreshold,
-                                                   5)
+                        indexes = cv2.dnn.NMSBoxes(self.boxes, self.confidences, self.confThreshold, self.nmsThreshold)
 
                         for i in range(len(self.boxes)):
                             if i in indexes:

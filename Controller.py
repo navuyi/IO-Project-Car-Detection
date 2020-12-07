@@ -1,5 +1,5 @@
 from Gui import Gui
-from Model import Model
+from OldModel import Model
 import tkinter as tk
 
 
