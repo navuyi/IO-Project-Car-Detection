@@ -11,13 +11,14 @@ class Gui:
         master.title("WTV")
         master.resizable(False, False)
         master.geometry(str(WIDTH) + "x" + str(HEIGHT))
+        
 
         # Create field for user's input video file
             # Label
-        self.filePathLabel = tk.Label(master, text="Plik wejściowy", font=(FONT_FAMILY, HEADER_FONT_SIZE, "bold"))
+        self.filePathLabel = tk.Label(master, text="Input file", font=(FONT_FAMILY, HEADER_FONT_SIZE, "bold"))
         self.filePathLabel.place(relx=0.5, rely=0.1, anchor='center')
             # Input button
-        self.filePathButton = tk.Button(master, text="Select file", command=self.selectFilePath, bg="lightblue")
+        self.filePathButton = tk.Button(master, text="Select file", command=self.selectFilePath, bg="gray69")
         self.filePathButton.pack()
         self.filePathButton.place(relx=0.5, rely=0.18, anchor='center', width=BUTTON_WIDTH, height=BUTTON_HEIGHT)
             # Path label
@@ -26,10 +27,10 @@ class Gui:
 
         # Create field for user's result directory PATH
              # Label
-        self.dirPathLabel = tk.Label(master, text="Katalog wyjściowy", font=(FONT_FAMILY, HEADER_FONT_SIZE, "bold"))
+        self.dirPathLabel = tk.Label(master, text="Output directory", font=(FONT_FAMILY, HEADER_FONT_SIZE, "bold"))
         self.dirPathLabel.place(relx=0.5, rely=0.4, anchor='center')
             # Input button
-        self.dirPathButton = tk.Button(master, text="Select directory", command=self.selectDirectoryPath, bg="lightblue")
+        self.dirPathButton = tk.Button(master, text="Select directory", command=self.selectDirectoryPath, bg="gray69")
         self.dirPathButton.pack()
         self.dirPathButton.place(relx=0.5, rely=0.48, anchor='center' , width=BUTTON_WIDTH+20, height=BUTTON_HEIGHT)
             # Path label
@@ -45,7 +46,7 @@ class Gui:
         self.frameOffset = tk.IntVar()
         self.frameOffset.set(1) # default value is 1 
         self.selector = tk.OptionMenu(master, self.frameOffset, 1, 2, 4, 6)
-        self.selector.config(bg="lightblue", font=(FONT_FAMILY, 10, "bold"))
+        self.selector.config(bg="gray69", font=(FONT_FAMILY, 10, "bold"))
         self.selector.place(relx=0.3, rely=0.75, anchor='center', width=75, height=25)
 
         # Create On The Fly Label
@@ -59,12 +60,12 @@ class Gui:
         self.otfCheckbox.place(relx=0.7, rely=0.75, anchor='center', width=75, height=25)
 
         # Create START button
-        self.startButton = tk.Button(master, text="DETECT", font=(FONT_FAMILY, HEADER_FONT_SIZE, "bold"), bg="steelblue")
+        self.startButton = tk.Button(master, text="DETECT", font=(FONT_FAMILY, HEADER_FONT_SIZE, "bold"), bg="gray69")
         self.startButton.pack()
         self.startButton.place(relx=0.5, rely=0.9, anchor='center', width = 100, height=35)
 
         # Create PLAY button --> plays last computed detection video
-        self.playButton = tk.Button(master, text="PLAY", font=(FONT_FAMILY, HEADER_FONT_SIZE, "bold"), bg="steelblue")
+        self.playButton = tk.Button(master, text="PLAY", font=(FONT_FAMILY, HEADER_FONT_SIZE, "bold"), bg="gray69")
         self.playButton.pack()
         self.playButton.place(relx=0.7, rely=0.9, anchor='center', width = 100, height=35)
         self.playButton.place_forget()
