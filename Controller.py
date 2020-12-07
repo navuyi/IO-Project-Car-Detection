@@ -3,6 +3,7 @@ from OldModel import Model
 import tkinter as tk
 from Tracker import detect_and_save
 from tkinter import messagebox
+from Settings import WIDTH, HEIGHT
 
 class Controller:
     def __init__(self):
@@ -12,13 +13,16 @@ class Controller:
         self.gui.startButton.bind('<ButtonRelease-1>', self.startAlgorithm)
 
         # Center gui on the screen
-        windowWidth = self.root.winfo_reqwidth()
-        windowHeight = self.root.winfo_reqheight()
+        ws = self.root.winfo_screenwidth()
+        hs = self.root.winfo_screenheight()
 
-        posRight = int(self.root.winfo_screenwidth()/2 - windowWidth/2)
-        posDown = int(self.root.winfo_screenheight()/2 - windowHeight/2)
-
-        self.root.geometry("+{}+{}".format(posRight, posDown))
+        w = WIDTH
+        h = HEIGHT
+        
+        # calculate position x, y
+        x = (ws/2) - (w/2)    
+        y = (hs/2) - (h/2)
+        self.root.geometry('%dx%d+%d+%d' % (w, h, x, y))
 
         # Start main loop of the gui
         self.root.mainloop()
