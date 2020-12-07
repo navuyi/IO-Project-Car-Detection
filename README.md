@@ -1,9 +1,9 @@
 # IO-Project-Car-Detection YOLOv4/OpenCV
 
 # Prerequisities
-  Python 3.x installed (Preffered 3.7/3.8)
-  pip
-  Git
+  -Python 3.x installed (Preffered 3.7 or 3.8)
+  -pip
+  -Git
 
 # Instalation for Windows 10
   1. Clone project repository: https://github.com/navuyi/IO-Project-Car-Detection
@@ -17,10 +17,8 @@
       ./virenv/Scripts/activate.bat
       ```
   5. ```pip install -r requirements.txt```
-  6. Download Yolov4 weights file from https://drive.google.com/file/d/1cewMfusmPjYWbrnuJRuKhPMwRe_b9PaT/view 
-  7. Make sure your project directory looks like that:
-     
-8. Execute program
-```bash
-python controller.py
-```
+  6. Download Yolov4 weights file from https://drive.google.com/file/d/1cewMfusmPjYWbrnuJRuKhPMwRe_b9PaT/view and copy it into IO-Project-Car-Detection folder
+  7. Execute program
+      ```bash
+      python controller.py
+      ```
