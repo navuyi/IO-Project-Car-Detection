@@ -6,7 +6,7 @@ def detect_and_save(file_path, dir_path, frame_offset, on_the_fly=False):
     CONFIDENCE_THRESHOLD = 0.2
     NMS_THRESHOLD = 0.4
     COLORS = [(0, 255, 255), (255, 255, 0), (0, 255, 0), (255, 0, 0)]
-    desired_classes = ("car", "bus", "truck", "van", "motorcycle")
+    desired_classes = ("car", "bus", "truck", "van", "motorbike")
     with open("yolo_classes.txt", "r") as f:
         class_names = [cname.strip() for cname in f.readlines()]
 
